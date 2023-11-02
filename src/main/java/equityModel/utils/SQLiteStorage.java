@@ -4,6 +4,8 @@ import equityModel.data.StockData;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SQLiteStorage {
@@ -77,5 +79,38 @@ public class SQLiteStorage {
             e.printStackTrace();
         }
     }
+
+    public static List<StockData> getStockDataForCompany(String companyTicker, DataFetcher.FetchDataType dataType) {
+        List<StockData> stockDataList = new ArrayList<>();
+
+        LocalDate now = LocalDate.now();
+        String dateSuffix = now.format(DateTimeFormatter.ofPattern("yyyy_MM_dd"));
+        String tableName = companyTicker.toUpperCase() + "_" + dataType.name().toLowerCase() + "_" + dateSuffix;
+
+        String sql = "SELECT date, open, high, low, close, volume FROM " + tableName;
+
+        try (Connection conn = DriverManager.getConnection(DB_PATH);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                StockData stockData = new StockData(
+                        rs.getString("date"),
+                        rs.getDouble("open"),
+                        rs.getDouble("high"),
+                        rs.getDouble("low"),
+                        rs.getDouble("close"),
+                        rs.getInt("volume")
+                );
+                stockDataList.add(stockData);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return stockDataList;
+    }
+
+
 
 }
