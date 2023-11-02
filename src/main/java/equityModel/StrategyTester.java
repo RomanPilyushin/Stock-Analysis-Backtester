@@ -61,6 +61,8 @@ public class StrategyTester {
                 .map(StrategyTester::convertToStockData)
                 .collect(Collectors.toList());
 
+        SQLiteStorage.storeStockData(stockDataList);
+
         MovingAverageCrossover strategy = new MovingAverageCrossover();
         boolean buySignal = strategy.evaluate(stockDataList);
 
