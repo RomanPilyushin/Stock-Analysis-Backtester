@@ -1,13 +1,16 @@
 package equityModel.utils;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class DatabaseUtility {
 
     private static final String DB_PATH = "jdbc:sqlite:stockdata.db";
 
-    public static String generateTableName(String company, String typeOfData, String date) {
-        return company + "_" + typeOfData + "_" + date;
+    public static String generateTableName(String company, String typeOfData) {
+        String date = DatabaseUtility.getCurrentFormattedDate();
+        return company + "_" + typeOfData.toLowerCase() + "_" + date;
     }
 
     public static boolean doesTableExist(String tableName) {
@@ -21,10 +24,16 @@ public class DatabaseUtility {
         }
     }
 
-    public static void createTable(String company, String typeOfData, String date) {
-        String tableName = generateTableName(company, typeOfData, date);
+    public static String getCurrentFormattedDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy_MM_dd");
+        return LocalDate.now().format(formatter);
+    }
 
-        String sql = "CREATE TABLE IF NOT EXISTS " + tableName + " (" +
+    public static void createTable(String company, String typeOfData) {
+        String tableName = generateTableName(company, typeOfData);
+
+        // Using double quotes around the table name
+        String sql = "CREATE TABLE IF NOT EXISTS \"" + tableName + "\" (" +
                 "id INTEGER PRIMARY KEY," +
                 "date TEXT NOT NULL," +
                 "open REAL NOT NULL," +

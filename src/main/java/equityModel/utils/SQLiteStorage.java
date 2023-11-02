@@ -17,18 +17,17 @@ public class SQLiteStorage {
     private static final String DB_PATH = "jdbc:sqlite:stockdata.db";
 
     public static void storeStockData(String companyTicker, String dataType, List<StockData> dataList) {
-        String fetchDate = LocalDate.now().toString();
-        String tableName = generateTableName(companyTicker, dataType, fetchDate);
+        String tableName = generateTableName(companyTicker, dataType);
 
         if (!doesTableExist(tableName)) {
-            createTable(companyTicker, dataType, fetchDate);
+            createTable(companyTicker, dataType);
         }
 
         insertDataIntoTable(tableName, dataList);
     }
 
     private static void insertDataIntoTable(String tableName, List<StockData> dataList) {
-        String sql = "INSERT INTO " + tableName + "(date, open, high, low, close, volume) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO \"" + tableName + "\" (date, open, high, low, close, volume) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_PATH);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -49,12 +48,32 @@ public class SQLiteStorage {
         }
     }
 
-    public static List<StockData> getStockDataForCompany(String companyTicker, DataFetcher.FetchDataType dataType) {
-        List<StockData> stockDataList = new ArrayList<>();
+    public static boolean doesCompanyDataExist(String companyTicker, FetchDataType fetchDataType, String date) {
+        // Assuming you already have the generateTableName method
+        String tableName = generateTableName(companyTicker, fetchDataType.toString());
+        return tableExists(tableName);
+    }
 
-        LocalDate now = LocalDate.now();
-        String dateSuffix = now.format(DateTimeFormatter.ofPattern("yyyy_MM_dd"));
-        String tableName = generateTableName(companyTicker, dataType.name().toLowerCase(), dateSuffix);
+    private static boolean tableExists(String tableName) {
+        String sql = "SELECT name FROM sqlite_master WHERE type='table' AND name=?";
+
+        try (Connection conn = DriverManager.getConnection(DB_PATH);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, tableName);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    public static List<StockData> getStockDataForCompany(String companyTicker, FetchDataType dataType) {
+        List<StockData> stockDataList = new ArrayList<>();
+        String tableName = generateTableName(companyTicker, dataType.getString());
 
         String sql = "SELECT date, open, high, low, close, volume FROM " + tableName;
 

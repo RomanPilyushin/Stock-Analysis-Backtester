@@ -95,7 +95,4 @@ public class DataFetcher {
         System.out.println("Error: " + error.getMessage());
     }
 
-    public enum FetchDataType {
-        INTRADAY, WEEK, MONTH
-    }
 }

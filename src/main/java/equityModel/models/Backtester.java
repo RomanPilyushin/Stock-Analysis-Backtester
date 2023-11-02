@@ -2,6 +2,7 @@ package equityModel.models;
 
 import equityModel.data.StockData;
 import equityModel.utils.DataFetcher;
+import equityModel.utils.FetchDataType;
 import equityModel.utils.SQLiteStorage;
 
 import java.util.List;
@@ -66,7 +67,7 @@ public class Backtester {
 
     public static void main(String[] args) {
         String companyTicker = "AAPL";
-        DataFetcher.FetchDataType fetchDataType = DataFetcher.FetchDataType.MONTH;
+        FetchDataType fetchDataType = FetchDataType.MONTH;
 
         List<StockData> stockDataList = SQLiteStorage.getStockDataForCompany(companyTicker, fetchDataType);
         Backtester backtester = new Backtester(stockDataList);
