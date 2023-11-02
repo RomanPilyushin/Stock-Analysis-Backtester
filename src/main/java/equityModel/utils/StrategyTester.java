@@ -1,6 +1,7 @@
 package equityModel.utils;
 
 import equityModel.data.StockData;
+import equityModel.models.Backtester;
 import equityModel.models.MovingAverageCrossover;
 
 import java.time.LocalDate;
@@ -32,11 +33,18 @@ public class StrategyTester {
                 return;
             }
 
-            // Perform backtesting using stockDataList...
+            // Once the data is fetched and stored, perform backtesting:
+            performBacktest(stockDataList);
 
         } else {
             System.out.println("Data for " + companyTicker + " exists in SQLite.");
-            // If data exists, and you want to perform backtesting on existing data, fetch it and then do the backtesting.
+            List<StockData> stockDataList = SQLiteStorage.getStockDataForCompany(companyTicker, fetchDataType);
+            performBacktest(stockDataList);
         }
+    }
+
+    private static void performBacktest(List<StockData> stockDataList) {
+        Backtester backtester = new Backtester(stockDataList);
+        backtester.run();
     }
 }

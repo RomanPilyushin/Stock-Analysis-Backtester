@@ -74,7 +74,7 @@ public class DataFetcher {
     private static void handleData(String companyTicker, FetchDataType dataType, TimeSeriesResponse response) {
         List<StockUnit> stockUnits = response.getStockUnits();
         List<StockData> stockDataList = stockUnits.stream()
-                .map(unit -> convertToStockData(unit))
+                .map(DataFetcher::convertToStockData)
                 .collect(Collectors.toList());
 
         SQLiteStorage.storeStockData(companyTicker, dataType.name(), stockDataList);
@@ -82,7 +82,7 @@ public class DataFetcher {
 
     private static StockData convertToStockData(StockUnit unit) {
         return new StockData(
-                unit.getDate().toString(),
+                unit.getDate(),
                 unit.getOpen(),
                 unit.getHigh(),
                 unit.getLow(),
