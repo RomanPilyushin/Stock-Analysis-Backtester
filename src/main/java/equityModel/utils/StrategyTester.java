@@ -8,14 +8,19 @@ import java.util.List;
 public class StrategyTester {
 
     public static void main(String[] args) {
-        String companyTicker = "AAPL"; // Change this to test other companies
-        DataFetcher.FetchDataType fetchDataType = DataFetcher.FetchDataType.MONTH; // Can be changed to other data types
+        String companyTicker = "AMZN"; // Change this to test other companies
+        DataFetcher.FetchDataType fetchDataType = DataFetcher.FetchDataType.INTRADAY; // Can be changed to other data types
 
-        // Fetch data
+        // Fetch data from the AlphaVantage API if not in SQLite
         List<StockData> stockDataList = SQLiteStorage.getStockDataForCompany(companyTicker, fetchDataType);
         if (stockDataList.isEmpty()) {
-            System.out.println("No data found for " + companyTicker + " for the given data type.");
-            return;
+            System.out.println("Fetching data for " + companyTicker + "...");
+            DataFetcher.fetchDataForCompany(companyTicker, fetchDataType);
+            stockDataList = SQLiteStorage.getStockDataForCompany(companyTicker, fetchDataType);
+            if (stockDataList.isEmpty()) {
+                System.out.println("Failed to fetch data for " + companyTicker + ".");
+                return;
+            }
         }
 
         // Analyze data using the MovingAverageCrossover strategy

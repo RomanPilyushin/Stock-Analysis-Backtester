@@ -1,13 +1,24 @@
 package equityModel.utils;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DatabaseUtility {
 
+    private static final String DB_PATH = "jdbc:sqlite:stockdata.db";
+
     public static String generateTableName(String company, String typeOfData, String date) {
         return company + "_" + typeOfData + "_" + date;
+    }
+
+    public static boolean doesTableExist(String tableName) {
+        try (Connection conn = DriverManager.getConnection(DB_PATH)) {
+            DatabaseMetaData md = conn.getMetaData();
+            ResultSet rs = md.getTables(null, null, tableName, null);
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public static void createTable(String company, String typeOfData, String date) {
@@ -23,13 +34,11 @@ public class DatabaseUtility {
                 "volume INTEGER NOT NULL" +
                 ");";
 
-        try (Connection conn = SQLiteConnection.connect();
+        try (Connection conn = DriverManager.getConnection(DB_PATH);
              Statement stmt = conn.createStatement()) {
-
             stmt.execute(sql);
-
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 }

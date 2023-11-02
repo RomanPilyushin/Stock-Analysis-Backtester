@@ -8,54 +8,23 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static equityModel.utils.DatabaseUtility.createTable;
+import static equityModel.utils.DatabaseUtility.doesTableExist;
+import static equityModel.utils.DatabaseUtility.generateTableName;
+
 public class SQLiteStorage {
 
-    private static final String DB_PATH = "jdbc:sqlite:stockdata.db";  // Replace with your SQLite database path
+    private static final String DB_PATH = "jdbc:sqlite:stockdata.db";
 
     public static void storeStockData(String companyTicker, String dataType, List<StockData> dataList) {
-        String tableName = generateTableName(companyTicker, dataType);
+        String fetchDate = LocalDate.now().toString();
+        String tableName = generateTableName(companyTicker, dataType, fetchDate);
 
         if (!doesTableExist(tableName)) {
-            createTable(tableName);
+            createTable(companyTicker, dataType, fetchDate);
         }
 
         insertDataIntoTable(tableName, dataList);
-    }
-
-    private static String generateTableName(String companyTicker, String dataType) {
-        String fetchDate = LocalDate.now().toString();
-        return companyTicker + "_" + dataType.toLowerCase() + "_" + fetchDate.replace("-", "_");
-    }
-
-    private static boolean doesTableExist(String tableName) {
-        try (Connection conn = DriverManager.getConnection(DB_PATH)) {
-            DatabaseMetaData md = conn.getMetaData();
-            ResultSet rs = md.getTables(null, null, tableName, null);
-            return rs.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-
-    private static void createTable(String tableName) {
-        String sql = "CREATE TABLE IF NOT EXISTS " + tableName + " (\n"
-                + "    id integer PRIMARY KEY,\n"
-                + "    date text NOT NULL,\n"
-                + "    open real NOT NULL,\n"
-                + "    high real NOT NULL,\n"
-                + "    low real NOT NULL,\n"
-                + "    close real NOT NULL,\n"
-                + "    volume integer NOT NULL\n"
-                + ");";
-
-        try (Connection conn = DriverManager.getConnection(DB_PATH);
-             Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     private static void insertDataIntoTable(String tableName, List<StockData> dataList) {
@@ -85,7 +54,7 @@ public class SQLiteStorage {
 
         LocalDate now = LocalDate.now();
         String dateSuffix = now.format(DateTimeFormatter.ofPattern("yyyy_MM_dd"));
-        String tableName = companyTicker.toUpperCase() + "_" + dataType.name().toLowerCase() + "_" + dateSuffix;
+        String tableName = generateTableName(companyTicker, dataType.name().toLowerCase(), dateSuffix);
 
         String sql = "SELECT date, open, high, low, close, volume FROM " + tableName;
 
@@ -110,7 +79,4 @@ public class SQLiteStorage {
 
         return stockDataList;
     }
-
-
-
 }
