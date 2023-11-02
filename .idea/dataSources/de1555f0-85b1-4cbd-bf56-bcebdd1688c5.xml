@@ -446,8 +446,8 @@
     </routine>
     <schema id="177" parent="1" name="main">
       <Current>1</Current>
-      <IntrospectionTimestamp>2023-11-02.16:59:49.298</IntrospectionTimestamp>
-      <LocalIntrospectionTimestamp>2023-11-02.14:59:49</LocalIntrospectionTimestamp>
+      <IntrospectionTimestamp>2023-11-02.17:40:19.262</IntrospectionTimestamp>
+      <LocalIntrospectionTimestamp>2023-11-02.15:40:19</LocalIntrospectionTimestamp>
     </schema>
     <argument id="178" parent="16">
       <ArgumentDirection>R</ArgumentDirection>
@@ -1469,65 +1469,104 @@
     <argument id="517" parent="176">
       <Position>1</Position>
     </argument>
-    <table id="518" parent="177" name="sqlite_master">
+    <table id="518" parent="177" name="AAPL_month_2023_11_02"/>
+    <table id="519" parent="177" name="sqlite_master">
       <System>1</System>
     </table>
-    <table id="519" parent="177" name="stock_data"/>
-    <column id="520" parent="518" name="type">
+    <table id="520" parent="177" name="stock_data"/>
+    <column id="521" parent="518" name="id">
+      <DasType>integer|0s</DasType>
+      <Position>1</Position>
+    </column>
+    <column id="522" parent="518" name="date">
+      <DasType>text|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="523" parent="518" name="open">
+      <DasType>real|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+    </column>
+    <column id="524" parent="518" name="high">
+      <DasType>real|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+    </column>
+    <column id="525" parent="518" name="low">
+      <DasType>real|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+    </column>
+    <column id="526" parent="518" name="close">
+      <DasType>real|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>6</Position>
+    </column>
+    <column id="527" parent="518" name="volume">
+      <DasType>integer|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>7</Position>
+    </column>
+    <key id="528" parent="518">
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="529" parent="519" name="type">
       <DasType>TEXT|0s</DasType>
       <Position>1</Position>
     </column>
-    <column id="521" parent="518" name="name">
+    <column id="530" parent="519" name="name">
       <DasType>TEXT|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="522" parent="518" name="tbl_name">
+    <column id="531" parent="519" name="tbl_name">
       <DasType>TEXT|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="523" parent="518" name="rootpage">
+    <column id="532" parent="519" name="rootpage">
       <DasType>INT|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="524" parent="518" name="sql">
+    <column id="533" parent="519" name="sql">
       <DasType>TEXT|0s</DasType>
       <Position>5</Position>
     </column>
-    <column id="525" parent="519" name="id">
+    <column id="534" parent="520" name="id">
       <DasType>INTEGER|0s</DasType>
       <Position>1</Position>
     </column>
-    <column id="526" parent="519" name="date">
+    <column id="535" parent="520" name="date">
       <DasType>TEXT|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="527" parent="519" name="open">
+    <column id="536" parent="520" name="open">
       <DasType>REAL|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="528" parent="519" name="high">
+    <column id="537" parent="520" name="high">
       <DasType>REAL|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
-    <column id="529" parent="519" name="low">
+    <column id="538" parent="520" name="low">
       <DasType>REAL|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
     </column>
-    <column id="530" parent="519" name="close">
+    <column id="539" parent="520" name="close">
       <DasType>REAL|0s</DasType>
       <NotNull>1</NotNull>
       <Position>6</Position>
     </column>
-    <column id="531" parent="519" name="volume">
+    <column id="540" parent="520" name="volume">
       <DasType>INTEGER|0s</DasType>
       <NotNull>1</NotNull>
       <Position>7</Position>
     </column>
-    <key id="532" parent="519">
+    <key id="541" parent="520">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
