@@ -33,7 +33,9 @@ public class MovingAverageCrossover {
             throw new RuntimeException("Failed to calculate moving averages using TA-Lib");
         }
 
-        int lastIndex = outSmaShortTerm.length - 1;
-        return outSmaShortTerm[lastIndex] > outSmaLongTerm[lastIndex];
+        int lastIndexShortTerm = outSmaShortTerm.length - 1;
+        int lastIndexLongTerm = outSmaLongTerm.length - 1;
+
+        return outSmaShortTerm[lastIndexShortTerm] > outSmaLongTerm[lastIndexLongTerm];
     }
 }

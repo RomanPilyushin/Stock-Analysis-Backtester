@@ -1,5 +1,6 @@
 package equityModel;
 
+import java.util.stream.Collectors;
 import com.crazzyghost.alphavantage.AlphaVantage;
 import com.crazzyghost.alphavantage.Config;
 import com.crazzyghost.alphavantage.parameters.DataType;
@@ -7,6 +8,8 @@ import com.crazzyghost.alphavantage.parameters.Interval;
 import com.crazzyghost.alphavantage.parameters.OutputSize;
 import com.crazzyghost.alphavantage.timeseries.response.StockUnit;
 import com.crazzyghost.alphavantage.timeseries.response.TimeSeriesResponse;
+import equityModel.data.StockData;
+import equityModel.models.MovingAverageCrossover;
 
 import java.util.List;
 
@@ -32,24 +35,36 @@ public class StrategyTester {
                 .onSuccess(response -> {
                     TimeSeriesResponse tsResponse = (TimeSeriesResponse) response;
                     onData(tsResponse.getStockUnits());
+                    System.exit(0);
                 })
                 .onFailure(error -> {
                     System.out.println("Error: " + error.getMessage());
+                    System.exit(1);
                 })
                 .fetch();
     }
 
-    public static void onData(List<StockUnit> stockUnits){
-        stockUnits.forEach(u -> {
-            System.out.println(u.getHigh());
-            System.out.println(u.getLow());
-            System.out.println(u.getOpen());
-            System.out.println(u.getClose());
-            System.out.println(u.getVolume());
-            System.out.println(u.getAdjustedClose());
-            System.out.println(u.getDividendAmount());
-            System.out.println(u.getSplitCoefficient());
-            System.out.println(u.getDate());
-        });
+    private static StockData convertToStockData(StockUnit unit) {
+        return new StockData(
+                unit.getDate().toString(),
+                unit.getOpen(),
+                unit.getHigh(),
+                unit.getLow(),
+                unit.getClose(),
+                unit.getVolume()
+        );
     }
+
+
+    public static void onData(List<StockUnit> stockUnits) {
+        List<StockData> stockDataList = stockUnits.stream()
+                .map(StrategyTester::convertToStockData)
+                .collect(Collectors.toList());
+
+        MovingAverageCrossover strategy = new MovingAverageCrossover();
+        boolean buySignal = strategy.evaluate(stockDataList);
+
+        System.out.println("Buy Signal: " + buySignal);
+    }
+
 }
