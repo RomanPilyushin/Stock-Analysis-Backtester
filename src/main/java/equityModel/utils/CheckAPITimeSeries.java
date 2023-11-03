@@ -8,7 +8,7 @@ import com.crazzyghost.alphavantage.timeseries.response.TimeSeriesResponse;
 
 import java.util.List;
 
-public class CheckAPI {
+public class CheckAPITimeSeries {
 
     static {
         // Initialize AlphaVantage with configuration

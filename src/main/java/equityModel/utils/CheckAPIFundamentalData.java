@@ -3,13 +3,10 @@ package equityModel.utils;
 import com.crazzyghost.alphavantage.AlphaVantage;
 import com.crazzyghost.alphavantage.Config;
 import com.crazzyghost.alphavantage.fundamentaldata.response.*;
-import com.crazzyghost.alphavantage.parameters.DataType;
-import com.crazzyghost.alphavantage.timeseries.response.StockUnit;
-import com.crazzyghost.alphavantage.timeseries.response.TimeSeriesResponse;
 
 import java.util.List;
 
-public class CheckAPI2 {
+public class CheckAPIFundamentalData {
 
     static {
         // Initialize AlphaVantage with configuration
@@ -23,10 +20,10 @@ public class CheckAPI2 {
     public static void main(String[] args) {
         String s = "GOOGL";
 
-        AlphaVantageAPICashFlow(s);
-        AlphaVantageAPIBalanceSheet(s);
-        AlphaVantageAPIIncomeStatement(s);
-        AlphaVantageAPICompanyOverview(s);
+        //AlphaVantageAPICashFlow(s);
+        //AlphaVantageAPIBalanceSheet(s);
+        //AlphaVantageAPIIncomeStatement(s);
+        //AlphaVantageAPICompanyOverview(s);
 
     }
 
