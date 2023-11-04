@@ -1,7 +1,12 @@
-package equityModel.utils;
+package equityModel.main;
 
 import equityModel.data.StockData;
 import equityModel.models.Backtester;
+import equityModel.utils.DataFetcher;
+import equityModel.utils.FetchDataType;
+import equityModel.utils.SQLiteStorage;
+import equityModel.utils.TableChecker;
+
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 

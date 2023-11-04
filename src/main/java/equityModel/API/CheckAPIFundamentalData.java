@@ -1,8 +1,9 @@
-package equityModel.utils;
+package equityModel.API;
 
 import com.crazzyghost.alphavantage.AlphaVantage;
 import com.crazzyghost.alphavantage.Config;
 import com.crazzyghost.alphavantage.fundamentaldata.response.*;
+import equityModel.utils.AlphaVantageConfig;
 
 import java.util.List;
 
