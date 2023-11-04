@@ -12,7 +12,7 @@ public class GetterFinder {
 
     public static List<Method> findGetters(Class<?> clazz) {
         return Arrays.stream(clazz.getMethods())
-                .filter(method -> isGetter(method))
+                .filter(GetterFinder::isGetter)
                 .collect(Collectors.toList());
     }
 

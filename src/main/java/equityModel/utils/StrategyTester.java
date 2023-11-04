@@ -3,38 +3,40 @@ package equityModel.utils;
 import equityModel.data.StockData;
 import equityModel.models.Backtester;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class StrategyTester {
 
     public static void main(String[] args) {
-        String companyTicker = "GD";
+        String companyTicker = "GS";
         FetchDataType fetchDataType = FetchDataType.WEEK;
 
+
         // Check if data exists
-        if (!TableChecker.doesTableHaveData(companyTicker, fetchDataType)) {
+        boolean dataExists = TableChecker.doesTableHaveData(companyTicker, fetchDataType);
+        List<StockData> stockDataList = null;
+
+        if (!dataExists) {
             System.out.println("Data for " + companyTicker + " not found in SQLite. Fetching from API...");
             DataFetcher.fetchDataForCompany(companyTicker, fetchDataType);
 
-            // Explicitly check if table has been created
-            if (!TableChecker.doesTableExist(companyTicker, fetchDataType)) {
-                System.out.println("Failed to create table for " + companyTicker + ". Exiting...");
+            // Check if the table was successfully created and data was fetched after the API call
+            if (TableChecker.doesTableHaveData(companyTicker, fetchDataType)) {
+                stockDataList = SQLiteStorage.getStockDataForCompany(companyTicker, fetchDataType);
+            } else {
+                System.out.println("Failed to create table or fetch data for " + companyTicker + ". Exiting...");
                 return;
             }
-
-            List<StockData> stockDataList = SQLiteStorage.getStockDataForCompany(companyTicker, fetchDataType);
-
-            if (stockDataList.isEmpty()) {
-                System.out.println("Something went wrong. Data for " + companyTicker + " was not fetched or stored correctly.");
-                return;
-            }
-
-            // Once the data is fetched and stored, perform backtesting:
-            performBacktest(stockDataList);
-
         } else {
             System.out.println("Data for " + companyTicker + " exists in SQLite.");
-            List<StockData> stockDataList = SQLiteStorage.getStockDataForCompany(companyTicker, fetchDataType);
+            stockDataList = SQLiteStorage.getStockDataForCompany(companyTicker, fetchDataType);
+        }
+
+        // If data is available (either was already there or just fetched and stored), perform backtesting
+        if (!stockDataList.isEmpty()) {
             performBacktest(stockDataList);
+        } else {
+            System.out.println("Something went wrong. No data available for backtesting.");
         }
     }
 
@@ -43,3 +45,4 @@ public class StrategyTester {
         backtester.run();
     }
 }
+

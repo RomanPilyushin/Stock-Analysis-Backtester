@@ -1,9 +1,6 @@
 package equityModel.models;
 
 import equityModel.data.StockData;
-import equityModel.utils.DataFetcher;
-import equityModel.utils.FetchDataType;
-import equityModel.utils.SQLiteStorage;
 
 import java.util.List;
 
@@ -15,15 +12,6 @@ public class Backtester {
     public Backtester(List<StockData> historicalData) {
         this.historicalData = historicalData;
         this.strategy = new MovingAverageCrossover();
-    }
-
-    public static void main(String[] args) {
-        String companyTicker = "AAPL";
-        FetchDataType fetchDataType = FetchDataType.MONTH;
-
-        List<StockData> stockDataList = SQLiteStorage.getStockDataForCompany(companyTicker, fetchDataType);
-        Backtester backtester = new Backtester(stockDataList);
-        backtester.run();
     }
 
     public void run() {

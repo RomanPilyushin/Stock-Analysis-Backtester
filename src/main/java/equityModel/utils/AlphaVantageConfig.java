@@ -1,6 +1,5 @@
 package equityModel.utils;
 
-import com.crazzyghost.alphavantage.AlphaVantage;
 import com.crazzyghost.alphavantage.Config;
 
 public class AlphaVantageConfig {
