@@ -14,8 +14,6 @@ import static equityModel.utils.DatabaseUtility.generateTableName;
 
 public class SQLiteStorage {
 
-    private static final String DB_PATH = "jdbc:sqlite:stockdata.db";
-
     public static void storeStockData(String companyTicker, String dataType, List<StockData> dataList) {
         String tableName = generateTableName(companyTicker, dataType);
 
@@ -29,7 +27,7 @@ public class SQLiteStorage {
     private static void insertDataIntoTable(String tableName, List<StockData> dataList) {
         String sql = "INSERT INTO \"" + tableName + "\" (date, open, high, low, close, volume) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = DriverManager.getConnection(DB_PATH);
+        try (Connection conn = SQLiteConnection.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             for (StockData data : dataList) {
                 pstmt.setString(1, data.getDate());
@@ -57,7 +55,7 @@ public class SQLiteStorage {
     private static boolean tableExists(String tableName) {
         String sql = "SELECT name FROM sqlite_master WHERE type='table' AND name=?";
 
-        try (Connection conn = DriverManager.getConnection(DB_PATH);
+        try (Connection conn = SQLiteConnection.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, tableName);
@@ -77,7 +75,7 @@ public class SQLiteStorage {
 
         String sql = "SELECT date, open, high, low, close, volume FROM " + tableName;
 
-        try (Connection conn = DriverManager.getConnection(DB_PATH);
+        try (Connection conn = SQLiteConnection.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 

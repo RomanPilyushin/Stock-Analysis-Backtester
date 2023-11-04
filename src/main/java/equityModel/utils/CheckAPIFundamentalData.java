@@ -9,61 +9,58 @@ import java.util.List;
 public class CheckAPIFundamentalData {
 
     static {
-        // Initialize AlphaVantage with configuration
-        Config cfg = Config.builder()
-                .key("AOC28O26TBLJ0XJB")
-                .timeOut(10)
-                .build();
+        // Initialize AlphaVantage
+        Config cfg = AlphaVantageConfig.getConfig();
         AlphaVantage.api().init(cfg);
     }
 
     public static void main(String[] args) {
-        String s = "GOOGL";
+        String ticker = "GOOGL";
 
-        //AlphaVantageAPICashFlow(s);
-        //AlphaVantageAPIBalanceSheet(s);
-        //AlphaVantageAPIIncomeStatement(s);
-        //AlphaVantageAPICompanyOverview(s);
+        getCashFlow(ticker);
+        getBalanceSheet(ticker);
+        getIncomeStatement(ticker);
+        getCompanyOverview(ticker);
 
     }
 
-    public static void AlphaVantageAPICashFlow(String company){
+    public static void getCashFlow(String company){
         AlphaVantage
                 .api()
                 .fundamentalData()
                 .cashFlow()
                 .forSymbol(company)
-                .onSuccess((CashFlowResponse e) -> getCashFlow(e.getAnnualReports()))
+                .onSuccess((CashFlowResponse e) -> printCashFlow(e.getAnnualReports()))
                 .fetch();
     }
-    public static void AlphaVantageAPIIncomeStatement(String company){
+    public static void getIncomeStatement(String company){
         AlphaVantage
                 .api()
                 .fundamentalData()
                 .incomeStatement()
                 .forSymbol(company)
-                .onSuccess((IncomeStatementResponse e) -> getIncomeStatement(e.getAnnualReports()))
+                .onSuccess((IncomeStatementResponse e) -> printIncomeStatement(e.getAnnualReports()))
                 .fetch();
     }
-    public static void AlphaVantageAPIBalanceSheet(String company){
+    public static void getBalanceSheet(String company){
         AlphaVantage
                 .api()
                 .fundamentalData()
                 .balanceSheet()
                 .forSymbol(company)
-                .onSuccess((BalanceSheetResponse e) -> getBalanceSheet(e.getAnnualReports()))
+                .onSuccess((BalanceSheetResponse e) -> printBalanceSheet(e.getAnnualReports()))
                 .fetch();
     }
-    public static void AlphaVantageAPICompanyOverview(String company){
+    public static void getCompanyOverview(String company){
         AlphaVantage
                 .api()
                 .fundamentalData()
                 .companyOverview()
                 .forSymbol(company)
-                .onSuccess((CompanyOverviewResponse e) -> getCompanyOverview(e.getOverview()))
+                .onSuccess((CompanyOverviewResponse e) -> printCompanyOverview(e.getOverview()))
                 .fetch();
     }
-    public static void getCashFlow(List<CashFlow> cashFlowResponseList) {
+    public static void printCashFlow(List<CashFlow> cashFlowResponseList) {
         cashFlowResponseList.forEach(u -> {
             System.out.println(u.getNetIncome());
             System.out.println(u.getProfitLoss());
@@ -86,7 +83,7 @@ public class CheckAPIFundamentalData {
             System.out.println(u.getChangeInInventory());
         });
     }
-    public static void getIncomeStatement(List<IncomeStatement> incomeStatementResponseList) {
+    public static void printIncomeStatement(List<IncomeStatement> incomeStatementResponseList) {
         incomeStatementResponseList.forEach(u -> {
             System.out.println(u.getCostofGoodsAndServicesSold());
             System.out.println(u.getSellingGeneralAndAdministrative());
@@ -113,7 +110,7 @@ public class CheckAPIFundamentalData {
             System.out.println(u.getInterestAndDebtExpense());
         });
     }
-    public static void getBalanceSheet(List<BalanceSheet> balanceSheetResponseList) {
+    public static void printBalanceSheet(List<BalanceSheet> balanceSheetResponseList) {
         balanceSheetResponseList.forEach(u -> {
             System.out.println(u.getTreasuryStock());
             System.out.println(u.getCurrentDebt());
@@ -151,7 +148,7 @@ public class CheckAPIFundamentalData {
             System.out.println(u.getIntangibleAssetsExcludingGoodwill());
         });
     }
-    public static void getCompanyOverview(CompanyOverview companyOverview) {
+    public static void printCompanyOverview(CompanyOverview companyOverview) {
 
         System.out.println(companyOverview.getForwardPE());
         System.out.println(companyOverview.getEvToRevenue());

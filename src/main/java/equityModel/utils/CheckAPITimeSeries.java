@@ -11,25 +11,26 @@ import java.util.List;
 public class CheckAPITimeSeries {
 
     static {
-        // Initialize AlphaVantage with configuration
-        Config cfg = Config.builder()
-                .key("AOC28O26TBLJ0XJB")
-                .timeOut(10)
-                .build();
+        // Initialize AlphaVantage
+        Config cfg = AlphaVantageConfig.getConfig();
         AlphaVantage.api().init(cfg);
     }
 
     public static void main(String[] args) {
+        getTimeSeries("GS");
+    }
+
+    public static void getTimeSeries(String ticker) {
         AlphaVantage.api()
                 .timeSeries()
                 .intraday()
-                .forSymbol("AMZN")
+                .forSymbol(ticker)
                 .dataType(DataType.JSON)
-                .onSuccess((TimeSeriesResponse e) -> onData(e.getStockUnits()))
+                .onSuccess((TimeSeriesResponse e) -> printData(e.getStockUnits()))
                 .fetch();
     }
 
-    public static void onData(List<StockUnit> stockUnits){
+    public static void printData(List<StockUnit> stockUnits){
         stockUnits.forEach(u -> {
             System.out.println(u.getHigh());
             System.out.println(u.getLow());

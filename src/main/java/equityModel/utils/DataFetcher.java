@@ -12,11 +12,8 @@ import java.util.stream.Collectors;
 public class DataFetcher {
 
     static {
-        // Initialize AlphaVantage with configuration
-        Config cfg = Config.builder()
-                .key("AOC28O26TBLJ0XJB")
-                .timeOut(10)
-                .build();
+        // Initialize AlphaVantage
+        Config cfg = AlphaVantageConfig.getConfig();
         AlphaVantage.api().init(cfg);
     }
 

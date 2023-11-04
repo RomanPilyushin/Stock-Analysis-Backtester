@@ -6,15 +6,14 @@ import java.time.format.DateTimeFormatter;
 
 public class DatabaseUtility {
 
-    private static final String DB_PATH = "jdbc:sqlite:stockdata.db";
-
     public static String generateTableName(String company, String typeOfData) {
         String date = DatabaseUtility.getCurrentFormattedDate();
         return company + "_" + typeOfData.toLowerCase() + "_" + date;
     }
 
     public static boolean doesTableExist(String tableName) {
-        try (Connection conn = DriverManager.getConnection(DB_PATH)) {
+
+        try (Connection conn = SQLiteConnection.connect()) {
             DatabaseMetaData md = conn.getMetaData();
             ResultSet rs = md.getTables(null, null, tableName, null);
             return rs.next();
@@ -43,7 +42,7 @@ public class DatabaseUtility {
                 "volume INTEGER NOT NULL" +
                 ");";
 
-        try (Connection conn = DriverManager.getConnection(DB_PATH);
+        try (Connection conn = SQLiteConnection.connect();
              Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
         } catch (SQLException e) {
