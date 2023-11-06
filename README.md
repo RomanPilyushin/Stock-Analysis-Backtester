@@ -28,3 +28,8 @@ cd equity-model-backtesting
 
 #Build the project with Maven
 mvn clean install
+```
+
+### Email
+
+rpilyushin [at] gmail.com

@@ -15,7 +15,7 @@ public class StrategyTester {
 
     public static void main(String[] args) {
         // Ticker symbol for the company to test the strategy on
-        String companyTicker = "GS";
+        String companyTicker = "LMT";
         // Type of data to fetch (in this case, weekly data)
         FetchDataType fetchDataType = FetchDataType.WEEK;
 
