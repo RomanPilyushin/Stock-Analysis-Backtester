@@ -21,7 +21,7 @@ Before you begin, ensure you have met the following requirements:
 
 ```bash
 #Clone the repository to your local machine
-git clone https://github.com/RomanPilyushin/StockQuantAnalysis.git
+git clone https://github.com/RomanPilyushin/Stock-Analysis-Backtester.git
 
 #Navigate to the project directory
 cd equity-model-backtesting
